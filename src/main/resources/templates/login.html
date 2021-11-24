@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" type="text/css" href="../style/formStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/animator.css" />
+    <link rel="stylesheet" type="text/css" href="/loginFormStyle.css" /><!--默认去找static下的css,直接文件名-->
+
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-    <form action="/login" method="post">
+<body class="loginAnim">
+<div class="divBackground">
+    <div class="loginDiv">
+        <form action="/login" method="post">
+            <label th:text="${msg}" style="color: red"></label><br>
+            <input type="text" name="loginId" placeholder="账号" class="loginInputForm"><br><!--name要和类变量保持一致-->
+            <input type="password" name="loginPassword" placeholder="密码" class="loginInputForm"><br>
+            <select name="loginType" class="loginSelect">
+                <option value="student">学生</option>
+                <option value="teacher">教师</option>
+            </select><br>
+            <div align="left" style="float:left">
+                <input type="submit" value="登录" class="loginButton">
+            </div>
+            <div align="right">
+                <input type="submit" value="注册" class="loginButton">
+            </div>
 
-        <label th:text="${msg}" style="color: red"></label><br>
-        账号<input type="text" name="loginId" placeholder="账号" autofocus><br><!--name要和类变量保持一致-->
-        密码<input type="password" name="loginPassword" placeholder="密码"><br>
-        学生<input type="radio" name="loginType" checked="checked" value="student">
-        老师<input type="radio" name="loginType" value="teacher"><br>
-        <input type="submit" value="登录">
-        <input type="submit" value="注册">
-    </form>
+        </form>
+    </div>
+</div>
+
+
 </body>
 </html>

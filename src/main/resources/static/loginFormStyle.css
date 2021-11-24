@@ -1,0 +1,52 @@
+.loginDiv{
+    position: absolute;
+    height: 250px;
+    width: 270px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    font-size: 25px;
+}
+
+.divBackground{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    height: 250px;
+    width: 400px;
+    background-color: white;
+    opacity: 0.7;
+}
+
+.loginInputForm{
+    width: 270px;
+    height: 30px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    outline: medium;
+    font-size: 20px;
+    background-color: transparent;
+    -webkit-box-shadow: 0 0 0 100px white inset;
+    box-shadow: 0 0 0 100px white inset;
+}
+
+.loginButton{
+    width: 120px;
+    height: 28px;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.loginSelect{
+    width: 90px;
+    height: 24px;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
