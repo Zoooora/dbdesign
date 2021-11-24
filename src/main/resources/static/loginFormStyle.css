@@ -1,3 +1,12 @@
+.mid{
+    position: absolute;
+    height: 50px;
+    width: 120px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
 .loginDiv{
     position: absolute;
     height: 250px;

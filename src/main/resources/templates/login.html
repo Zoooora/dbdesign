@@ -5,13 +5,13 @@
     <link rel="stylesheet" type="text/css" href="/loginFormStyle.css" /><!--默认去找static下的css,直接文件名-->
 
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>登录页</title>
 </head>
 <body class="loginAnim">
 <div class="divBackground">
     <div class="loginDiv">
         <form action="/login" method="post">
-            <label th:text="${msg}" style="color: red"></label><br>
+            <br>
             <input type="text" name="loginId" placeholder="账号" class="loginInputForm"><br><!--name要和类变量保持一致-->
             <input type="password" name="loginPassword" placeholder="密码" class="loginInputForm"><br>
             <select name="loginType" class="loginSelect">
@@ -23,10 +23,11 @@
             </div>
             <div align="right">
                 <input type="submit" value="注册" class="loginButton">
-            </div>
+            </div><br>
 
         </form>
-    </div>
+    </div><br><br><br><br><br><br><br><br><br>
+    <div class="mid"><label th:utext="${msg}" style="color: red"></label><br></div>
 </div>
 
 
