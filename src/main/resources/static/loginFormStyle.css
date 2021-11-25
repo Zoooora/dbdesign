@@ -46,9 +46,10 @@
 }
 
 .loginButton{
-    width: 120px;
+    width: 270px;
     height: 28px;
     margin-top: 10px;
+    margin-right: 50px;
     font-size: 15px;
 }
 

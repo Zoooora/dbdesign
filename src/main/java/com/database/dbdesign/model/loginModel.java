@@ -44,5 +44,4 @@ public class loginModel {
         return "select Tno from teacher where Tno = ? and Tpassword = ?";
     }
 
-
 }
