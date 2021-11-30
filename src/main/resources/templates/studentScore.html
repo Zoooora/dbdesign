@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学科详情</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>课程</th> <th>成绩</th>
+    </tr>
+    <tr th:each="score:${scoreMap}">
+        <td><label th:text="${score.key}"></label></td>
+        <td><label th:text="${score.value}"></label></td>
+    </tr>
+</table><br>
+GPA:<label th:text="${GPA}"></label>
+</body>
+</html>

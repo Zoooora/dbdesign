@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>学生主页</title>
 </head>
 <body>
-<table>
-    <tr>
-        <th>学号</th> <th>姓名</th> <th>性别</th> <th>出生日期</th> <th>院系</th> <th>专业</th>
-    </tr>
-    <tr>
-        <td><label th:text="${Sno}"></label></td>
-        <td><label th:text="${Sname}"></label></td>
-        <td><label th:text="${Ssex}"></label></td>
-        <td><label th:text="${Sbirthday}"></label></td>
-        <td><label th:text="${Sdept}"></label></td>
-        <td><label th:text="${Sspno}"></label></td>
-    </tr>
-</table>
+<form action="/information" method="post">
+    <input type="submit" value="个人资料">
+</form>
 <form action="/change" method="GET">
-    <input type="submit" value="更改密码" name="change">
+    <input type="submit" value="更改密码">
+</form>
+<form action="/score" method="GET">
+    <input type="submit" value="成绩查询">
 </form>
 
 </body>

@@ -9,6 +9,9 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class studentActionModel {
@@ -35,13 +38,14 @@ public class studentActionModel {
     }
 
     public String changePassword(String originalPassword, String newPassword, String confirmNewPassword, HttpSession session, Model model){
+        String Sno = (String)session.getAttribute("loginClientId");
         try{
             String sql1 = "select Spassword from student where Sno = ?";
-            String formerPassword = jdbcTemplate.queryForObject(sql1, String.class, session.getAttribute("loginClientId"));
+            String formerPassword = jdbcTemplate.queryForObject(sql1, String.class, Sno);
             if(formerPassword.equals(originalPassword)){
                 if(newPassword.equals(confirmNewPassword)){
                     String sql2 = "update student set Spassword = ? where Sno = ?";
-                    Object[] args = {newPassword, session.getAttribute("loginClientId")};
+                    Object[] args = {newPassword, Sno};
                     jdbcTemplate.update(sql2, args);
                     return "redirect:/studentMain.html";
                 }
@@ -61,4 +65,47 @@ public class studentActionModel {
 
         
     }
+
+    public String getScore(HttpSession session, Model model){
+        float GPA = 0;
+
+        /*
+        * 获取成绩列表
+        * */
+        String Sno = (String)session.getAttribute("loginClientId");
+        String sql1 = "select score from student_course where Sno = ?";
+        String sql2 = "select Cname from course where Cno in " +
+                "(select Cno from student_course where Sno = ?)";
+        List<Integer> scoreList = jdbcTemplate.queryForList(sql1, Integer.class, Sno);
+        List<String> courseList = jdbcTemplate.queryForList(sql2, String.class, Sno);
+        Map<String, Integer> mapScore = new HashMap<>();
+        for(int i = 0; i < courseList.size(); i++){
+            mapScore.put(courseList.get(i), scoreList.get(i));
+        }
+        model.addAttribute("scoreMap", mapScore);
+
+        /*
+        * 获取GPA
+        * */
+        String sql3 = "select sum(Ccredit) from course where Cno in " +
+                "(select Cno from student_course where Sno = ?)";
+        String sql4 = "select score from student_course inner join course " +
+                "where Sno = ? and student_course.Cno = course.Cno";
+        String sql5 = "select Ccredit from student_course inner join course " +
+                "where Sno = ? and student_course.Cno = course.Cno";
+        float creditCount = jdbcTemplate.queryForObject(sql3, float.class, Sno);
+        List<Integer> GPA_score = jdbcTemplate.queryForList(sql4, Integer.class, Sno);
+        List<Float> GPA_credit = jdbcTemplate.queryForList(sql5, Float.class, Sno);
+        for(int i = 0; i < GPA_score.size(); i++){
+            GPA += (((float) GPA_score.get(i) - 50) / 10 * GPA_credit.get(i));
+        }
+        GPA /= creditCount;
+        model.addAttribute("GPA", GPA);
+
+        return "studentScore";
+    }
+
+
+
+
 }

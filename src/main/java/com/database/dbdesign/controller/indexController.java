@@ -16,9 +16,6 @@ public class indexController {
     @Autowired
     private loginModel login;/*不能用new*/
 
-    @Autowired
-    private studentActionModel studentAction;
-
     @GetMapping(value = {"/", "/login"})
     public String loginPage(){
         return "login";
@@ -33,7 +30,6 @@ public class indexController {
     public String studentMainPage(HttpSession session, Model model){
         Object loginStudent = session.getAttribute("loginClientId");
         if(loginStudent != null) {
-            studentAction.mainPageForm(session, model);
             return "studentMain";
         }
         else{

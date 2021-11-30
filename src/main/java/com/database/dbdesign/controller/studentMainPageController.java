@@ -15,6 +15,12 @@ public class studentMainPageController {
     @Autowired
     private studentActionModel studentAction;
 
+    @PostMapping("/information")
+    public String getInformation(HttpSession session, Model model){
+        studentAction.mainPageForm(session, model);
+        return "studentInformation";
+    }
+
     @GetMapping("/change")
     public String change(){
         return "studentChangePassword";
@@ -23,5 +29,10 @@ public class studentMainPageController {
     @PostMapping("/studentChangePassword")
     public String studentChangePassword(String originalPassword, String newPassword, String confirmNewPassword, HttpSession session, Model model){
         return studentAction.changePassword(originalPassword, newPassword, confirmNewPassword, session, model);
+    }
+
+    @GetMapping("/score")
+    public String getScore(HttpSession session, Model model){
+        return studentAction.getScore(session, model);
     }
 }
