@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>教师号</th> <th>姓名</th> <th>性别</th> <th>出生日期</th> <th>院系</th>
+    </tr>
+    <tr>
+        <td><label th:text="${Tno}"></label></td>
+        <td><label th:text="${Tname}"></label></td>
+        <td><label th:text="${Tsex}"></label></td>
+        <td><label th:text="${Tbirthday}"></label></td>
+        <td><label th:text="${Tdept}"></label></td>
+    </tr>
+</table>
+</body>
+</html>
