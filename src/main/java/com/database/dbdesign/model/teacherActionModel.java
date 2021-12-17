@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -25,36 +25,31 @@ public class teacherActionModel {
         String sql = "select * from teacher where Tno = ?";
         String getBirthday = "select DATE(Tbirthday) from teacher where Tno = ?";
         String getDept = "select Dname from department where Dno = ?";
+        String getSpeciality = "select SPname from speciality where SPno = ?";
         Teacher teacher = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Teacher.class), session.getAttribute("loginClientId"));
         Date birthday = jdbcTemplate.queryForObject(getBirthday, Date.class, session.getAttribute("loginClientId"));
         String dept = jdbcTemplate.queryForObject(getDept, String.class, teacher.getTdept());
+        String speciality = jdbcTemplate.queryForObject(getSpeciality, String.class, teacher.getTspno());
         String s = String.valueOf(birthday);
         model.addAttribute("Tno", session.getAttribute("loginClientId"));
         model.addAttribute("Tname", teacher.getTname());
         model.addAttribute("Tsex", teacher.getTsex());
         model.addAttribute("Tbirthday", s.substring(0, 11));
         model.addAttribute("Tdept", dept);
+        model.addAttribute("Tspeciality", speciality);
         return "teacherInformation";
     }
 
-    public String getAllStudentInSameDepartment(HttpSession session, Model model){
+    public String getAllStudentInSameSpeciality(HttpSession session, Model model){
         String Tno = (String)session.getAttribute("loginClientId");
-        String sql1 = "select * from student where Sdept in " +
-                "(select Tdept from teacher where Tno = ?)";
-        String sql2 = "select SPname from speciality where SPno in " +
-                "(select Sspno from student where Sdept in " +
-                "(select Tdept from teacher where Tno = ?))";
+        String sql1 = "select * from student where Sspno in " +
+                "(select Tspno from teacher where Tno = ?)";
         List<Student> students = jdbcTemplate.query(sql1, new BeanPropertyRowMapper<>(Student.class), Tno);
-        List<String> specialityList = jdbcTemplate.queryForList(sql2, String.class, Tno);
-        Map<Student, String> map = new HashMap<>();
-        for(int i = 0; i < students.size(); i++){
-            map.put(students.get(i), specialityList.get(i));
-        }
-        model.addAttribute("map", map);
+        model.addAttribute("list", students);
         return "teacherGetAllStudent";
     }
 
-    public String getScore(@RequestBody String Sno, HttpSession session, Model model){
+    public String getScore(String Sno, Model model){
         float GPA = 0;
         /*
          * 获取成绩列表
@@ -87,9 +82,22 @@ public class teacherActionModel {
         GPA /= creditCount;
         model.addAttribute("specificGPA", GPA);
 
-        return "";
+        return "teacherGetSpecificStudent";
     }
 
+    public String addStudent(Student student, Model model){
+        if(!StringUtils.hasText(student.getSno()) || !StringUtils.hasText(student.getSname()) ||
+                !StringUtils.hasText(student.getSsex()) || !StringUtils.hasText(student.getSbirthday().toString()) ||
+                !StringUtils.hasText(student.getSdept()) || !StringUtils.hasText(student.getSspno()) ||
+                !StringUtils.hasText(student.getSpassword())){
+            model.addAttribute("addErrorMsg", "请正确的输入全部信息");
+            return "teacherAddStudent";
+        }
+        String sql = "insert into student (Sno, Sname, Ssex, Sbirthday, Sdept, Sspno, Spassword) " +
+                "values (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, student.getSno(), student.getSname(), student.getSsex(), student.getSbirthday(), student.getSdept(), student.getSspno(), student.getSpassword());
+        return "teacherMain";
+    }
 
     public String alterPassword(String originalPassword, String newPassword, String confirmNewPassword, HttpSession session, Model model){
         String Tno = (String)session.getAttribute("loginClientId");

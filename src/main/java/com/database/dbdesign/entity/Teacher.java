@@ -11,5 +11,6 @@ public class Teacher {
     private String Tsex;
     private Date Tbirthday;
     private String Tdept;
+    private String Tspno;
     private String Tpassword;
 }

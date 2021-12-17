@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>增加学生</title>
+</head>
+<body>
+<form action="/addStudent" method="post">
+    <input type="text" name="Sname" placeholder="姓名"><br>
+    <input type="text" name="Sno" placeholder="学号"><br>
+    <input type="text" name="Ssex" placeholder="性别"><br>
+    <input type="date" name="Sbirthday" placeholder="出生日期"><br>
+    <select name="Sdept">
+        <option value="D1101">D1101 计算机学院</option>
+        <option value="D1102">D1101 数学学院</option>
+        <option value="D1103">D1101 文学院</option>
+        <option value="D1104">D1101 外国语学院</option>
+    </select><br>
+    <select name="Sspno">
+        <option value="SP110101">SP110101 软件工程</option>
+        <option value="SP110102">SP110102 计算机科学</option>
+        <option value="SP110103">SP110103 网络安全</option>
+        <option value="SP110201">SP110201 数学系</option>
+        <option value="SP110301">SP110301 汉语言文学</option>
+        <option value="SP110302">SP110302 新闻传播学</option>
+        <option value="SP110401">SP110401 对外经济贸易</option>
+        <option value="SP110402">SP110402 翻译系</option>
+    </select><br>
+    <input type="password" name="Spassword" placeholder="密码"><br>
+    <label th:text="${addErrorMsg}" style="color: red"></label><br>
+    <input type="submit" name="提交">
+</form>
+
+</body>
+</html>

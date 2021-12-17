@@ -5,16 +5,17 @@
     <title>学生信息</title>
 </head>
 <body>
+
 <table>
     <tr>
-        <th>学号</th> <th>姓名</th> <th>性别</th> <th>专业</th>
+        <th>  </th> <th>学号</th> <th>姓名</th> <th>性别</th>
     </tr>
-    <tr th:each="relation:${map}">
-        <td><label th:text="${relation.key.Sno}"></label></td>
-        <td><label th:text="${relation.key.Sname}"></label></td>
-        <td><label th:text="${relation.key.Ssex}"></label></td>
-        <td><label th:text="${relation.value}"></label></td>
-        <td><input type="submit" value="成绩查询" action="/studentDetail/{}" method="get"></td>
+    <tr th:each="student:${list}" th:action="@{/studentDetail(Sno = ${student.Sno})}">
+            <td><input type="checkbox" name="willBeDeleteStudent" th:value="${student.Sno}"></td>
+            <td><label th:text="${student.Sno}"></label></td>
+            <td><label th:text="${student.Sname}"></label></td>
+            <td><label th:text="${student.Ssex}"></label></td>
+            <td><input type="submit" value="成绩查询" method="get"></td>
     </tr>
 </table>
 </body>
