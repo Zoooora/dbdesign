@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>学生详情</title>
 </head>
 <body>
+学生姓名：<label th:text="${Sname}"></label>   学号：<label th:text="${Sno}"></label><br>
+<label th:text="${studentScoreNotFound}" style="color: red"></label>
+<table>
+    <tr>
+        <th>课程</th> <th>成绩</th>
+    </tr>
+    <tr th:each="score:${specificScoreMap}">
+        <td><label th:text="${score.key}"></label></td>
+        <td><label th:text="${score.value}"></label></td>
+    </tr>
+</table><br>
+GPA:<label th:text="${specificGPA}"></label><br><br>
+
+<form  th:action="@{/updateScore(Sno = ${Sno})}" method="post">
+    <table>
+        <tr>
+            <th>课程</th> <th>成绩</th>
+        </tr>
+        <tr th:each="score:${specificScoreMap}">
+            <td><label th:text="${score.key}"></label></td>
+            <td><input type="text" th:name="${score.key}"></td>
+        </tr>
+    </table><br>
+    <input type="submit" value="修改/添加成绩">
+</form>
+
 
 </body>
 </html>

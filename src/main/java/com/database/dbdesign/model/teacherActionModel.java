@@ -50,39 +50,49 @@ public class teacherActionModel {
     }
 
     public String getScore(String Sno, Model model){
-        float GPA = 0;
-        /*
-         * 获取成绩列表
-         * */
-        String sql1 = "select score from student_course where Sno = ?";
-        String sql2 = "select Cname from course where Cno in " +
-                "(select Cno from student_course where Sno = ?)";
-        List<Integer> scoreList = jdbcTemplate.queryForList(sql1, Integer.class, Sno);
-        List<String> courseList = jdbcTemplate.queryForList(sql2, String.class, Sno);
-        Map<String, Integer> mapScore = new HashMap<>();
-        for(int i = 0; i < courseList.size(); i++){
-            mapScore.put(courseList.get(i), scoreList.get(i));
-        }
-        model.addAttribute("specificScoreMap", mapScore);
-        /*
-         * 获取GPA
-         * */
-        String sql3 = "select sum(Ccredit) from course where Cno in " +
-                "(select Cno from student_course where Sno = ?)";
-        String sql4 = "select score from student_course inner join course " +
-                "where Sno = ? and student_course.Cno = course.Cno";
-        String sql5 = "select Ccredit from student_course inner join course " +
-                "where Sno = ? and student_course.Cno = course.Cno";
-        float creditCount = jdbcTemplate.queryForObject(sql3, float.class, Sno);
-        List<Integer> GPA_score = jdbcTemplate.queryForList(sql4, Integer.class, Sno);
-        List<Float> GPA_credit = jdbcTemplate.queryForList(sql5, Float.class, Sno);
-        for(int i = 0; i < GPA_score.size(); i++){
-            GPA += (((float) GPA_score.get(i) - 50) / 10 * GPA_credit.get(i));
-        }
-        GPA /= creditCount;
-        model.addAttribute("specificGPA", GPA);
+        try {
+            String getName = "select Sname from student where Sno = ?";
+            String name = jdbcTemplate.queryForObject(getName, String.class, Sno);
+            model.addAttribute("Sname", name);
+            model.addAttribute("Sno", Sno);
 
-        return "teacherGetSpecificStudent";
+            float GPA = 0;
+            /*
+             * 获取成绩列表
+             * */
+            String sql1 = "select score from student_course where Sno = ?";
+            String sql2 = "select Cname from course where Cno in " +
+                    "(select Cno from student_course where Sno = ?)";
+            List<Integer> scoreList = jdbcTemplate.queryForList(sql1, Integer.class, Sno);
+            List<String> courseList = jdbcTemplate.queryForList(sql2, String.class, Sno);
+            Map<String, Integer> mapScore = new HashMap<>();
+            for(int i = 0; i < courseList.size(); i++){
+                mapScore.put(courseList.get(i), scoreList.get(i));
+            }
+            model.addAttribute("specificScoreMap", mapScore);
+            /*
+             * 获取GPA
+             * */
+            String sql3 = "select sum(Ccredit) from course where Cno in " +
+                    "(select Cno from student_course where Sno = ?)";
+            String sql4 = "select score from student_course inner join course " +
+                    "where Sno = ? and student_course.Cno = course.Cno";
+            String sql5 = "select Ccredit from student_course inner join course " +
+                    "where Sno = ? and student_course.Cno = course.Cno";
+            float creditCount = jdbcTemplate.queryForObject(sql3, Float.class, Sno);
+            List<Integer> GPA_score = jdbcTemplate.queryForList(sql4, Integer.class, Sno);
+            List<Float> GPA_credit = jdbcTemplate.queryForList(sql5, Float.class, Sno);
+            for(int i = 0; i < GPA_score.size(); i++){
+                GPA += (((float) GPA_score.get(i) - 50) / 10 * GPA_credit.get(i));
+            }
+            GPA /= creditCount;
+            model.addAttribute("specificGPA", GPA);
+
+            return "teacherGetSpecificStudent";
+        }catch (Exception e){
+            model.addAttribute("studentScoreNotFound", "该学生暂时没有成绩");
+            return "teacherGetSpecificStudent";
+        }
     }
 
     public String addStudent(Student student, Model model){
@@ -96,6 +106,17 @@ public class teacherActionModel {
         String sql = "insert into student (Sno, Sname, Ssex, Sbirthday, Sdept, Sspno, Spassword) " +
                 "values (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, student.getSno(), student.getSname(), student.getSsex(), student.getSbirthday(), student.getSdept(), student.getSspno(), student.getSpassword());
+        return "teacherMain";
+    }
+
+    public String deleteStudent(String confirmSno, Model model){
+        if(StringUtils.hasText(confirmSno)){
+            String sql = "delete from student where Sno = ?";
+            jdbcTemplate.update(sql, confirmSno);
+        }
+        else{
+            model.addAttribute("deleteError", "输入学号错误");
+        }
         return "teacherMain";
     }
 

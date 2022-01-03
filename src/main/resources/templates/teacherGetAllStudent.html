@@ -5,18 +5,26 @@
     <title>学生信息</title>
 </head>
 <body>
-
-<table>
-    <tr>
-        <th>  </th> <th>学号</th> <th>姓名</th> <th>性别</th>
-    </tr>
-    <tr th:each="student:${list}" th:action="@{/studentDetail(Sno = ${student.Sno})}">
-            <td><input type="checkbox" name="willBeDeleteStudent" th:value="${student.Sno}"></td>
+<form action="/studentDetail" method="get">
+    <table>
+        <tr>
+            <th>  </th> <th>学号</th> <th>姓名</th> <th>性别</th>
+        </tr>
+        <tr th:each="student:${list}" th:action="@{/studentDetail(Sno = ${student.Sno})}">
+            <td><input type="radio" name="Sno" th:value="${student.Sno}"></td>
             <td><label th:text="${student.Sno}"></label></td>
             <td><label th:text="${student.Sname}"></label></td>
             <td><label th:text="${student.Ssex}"></label></td>
-            <td><input type="submit" value="成绩查询" method="get"></td>
-    </tr>
-</table>
+        </tr>
+    </table>
+    <input type="submit" value="学生详情">
+</form><br>
+
+<form action="/studentInformation" method="post">
+    <input name="_method" type="hidden" value="delete">
+    <input type="submit" value="删除学生">
+    <input type="text" name="confirmSno" placeholder="确认该学生学号以进行删除">
+</form>
+<label th:text="${deleteError}" style="color: red"></label>
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import com.database.dbdesign.model.teacherActionModel;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +51,10 @@ public class teacherMainPageController {
     @PostMapping("/addStudent")
     public String addStudentInformation(Student student, Model model){
         return teacherAction.addStudent(student, model);
+    }
+
+    @DeleteMapping("/studentInformation")
+    public String deleteStudent(String Sno,String confirmSno, Model model){
+        return teacherAction.deleteStudent(confirmSno, model);
     }
 }
